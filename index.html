@@ -116,11 +116,12 @@ uploadBtn.addEventListener('click', async ()=>{
         uploadStatus.innerText='Sedang memproses ke Api... ⏳';
 
         // Kirim ke Vercel serverless
-        const res = await fetch('/upload', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ url: catboxURL, type: fileType })
-        });
+        // Kirim ke Vercel serverless
+const res = await fetch('/upload', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ fileURL: catboxURL, fileType: fileType }) // <-- nama properti sinkron dengan upload.js
+});
 
         const data = await res.json();
 
