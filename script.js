@@ -4,7 +4,7 @@ const products = [
         id: 1,
         name: "WA Auto Reply Bot",
         price: "$99",
-        image: "assets/images/bot1.jpg",
+        image: "https://files.catbox.moe/au76r7.jpeg",
         category: "bot",
         features: ["Auto Reply", "Keyword Trigger", "Multi-language", "24/7 Online"],
         description: "Advanced auto-reply bot with AI capabilities"
