@@ -10,7 +10,64 @@
 </head>
 <body>
     <!-- SPLASH SCREEN -->
-    
+    <div id="splash-screen" class="splash-screen">
+        <!-- Video Background -->
+        <div class="video-container">
+            <video id="intro-video" autoplay muted playsinline>
+                <source src="https://files.catbox.moe/wqbpcn.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div class="video-overlay"></div>
+        </div>
+        
+        <!-- Loading Animation -->
+        <div class="loading-container">
+            <div class="loading-title">
+                <h1><span class="glitch" data-text="CYBER SCAN">CYBER SCAN</span></h1>
+                <p class="subtitle">SYSTEM INITIALIZATION</p>
+            </div>
+            
+            <div class="loading-progress">
+                <div class="progress-circle">
+                    <div class="progress-ring">
+                        <svg width="200" height="200">
+                            <circle class="progress-ring-circle" cx="100" cy="100" r="90" stroke="#ff0033" stroke-width="10" fill="transparent"/>
+                        </svg>
+                    </div>
+                    <div class="progress-text" id="progress-text">0%</div>
+                </div>
+                
+                <div class="loading-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">SYSTEM CHECK</span>
+                        <span class="stat-value" id="system-check">PENDING</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">CONNECTION</span>
+                        <span class="stat-value" id="connection">ESTABLISHING</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">SECURITY</span>
+                        <span class="stat-value" id="security">ENCRYPTING</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="loading-message">
+                <p id="loading-message">> INITIALIZING CYBER SCAN PROTOCOL...</p>
+                <div class="terminal-line">
+                    <span class="prompt">root@cyberscan:~#</span>
+                    <span class="command" id="terminal-command"></span>
+                    <span class="cursor">█</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Skip Button -->
+        <button id="skip-btn" class="skip-btn">
+            <i class="fas fa-forward"></i> SKIP INTRO
+        </button>
+    </div>
     
     <!-- MAIN INTERFACE (Hidden Initially) -->
     <div id="main-interface" class="main-interface">
@@ -313,7 +370,7 @@
                             </div>
                             
                             <div class="profile-info">
-                                <h2 class="profile-name">Saikyu Trinity</h2>
+                                <h2 class="profile-name">Saikyu Senpai</h2>
                                 <p class="profile-title">CYBER SECURITY RESEARCHER</p>
                                 <div class="profile-status">
                                     <span class="status-indicator online"></span>
@@ -345,12 +402,13 @@
                                         </div>
                                     </div>
                                     <div class="timeline-item">
-                                        <div class="timeline-date">2024</div>
+                                        <div class="timeline-date">2023</div>
                                         <div class="timeline-content">
-                                            <h4>Bot Development</h4>
-                                            <p>Membuat Dan Mengembangkan Bot Whatsapp</p>
+                                            <h4>Privacy Research</h4>
+                                            <p>Study on browser tracking and fingerprinting techniques</p>
                                         </div>
                                     </div>
+                                    
                                 </div>
                             </div>
                             
@@ -358,7 +416,7 @@
                                 <h3><i class="fas fa-envelope"></i> CONTACT</h3>
                                 <p>For security research collaboration or tool suggestions:</p>
                                 <div class="contact-links">
-                                    <a href="https://github.com" class="contact-link">
+                                    <a href="#" class="contact-link">
                                         <i class="fab fa-github"></i> GitHub
                                     </a>
                                     <a href="xnxx.com" class="contact-link">
@@ -399,8 +457,8 @@
                 
                 <div class="footer-section">
                     <h4>VERSION</h4>
-                    <p>v1.0.0| Build 2025.12.08</p>
-                    <p class="footer-note">© 2025 Saikyu || Cyber Scan.</p>
+                    <p>© Saikyu-Senpai | v2.0.1 | Build 2025.12.08</p>
+                   
                 </div>
             </div>
             
@@ -418,4 +476,4 @@
     <script src="loading.js"></script>
     <script src="video-control.js"></script>
 </body>
-</html>
+                                                          </html>
