@@ -10,60 +10,7 @@
 </head>
 <body>
     <!-- SPLASH SCREEN -->
-    <div id="splash-screen" class="splash-screen">
-        <!-- Video Background -->
-        <!-- PASTIKAN di line ~20-25 ada ini: -->
-<div class="video-container">
-    <video id="intro-video" autoplay muted playsinline>
-        <source src="https://files.catbox.moe/wqbpcn.mp4" type="video/mp4">
-    </video>
-</div>
-        
-        <!-- Loading Animation -->
-        <div class="loading-container">
-            <div class="loading-title">
-                <h1><span class="glitch" data-text="CYBER SCAN">CYBER SCAN</span></h1>
-                <p class="subtitle">SYSTEM INITIALIZATION</p>
-            </div>
-                <div class="loading-progress">
-             <div class="progress-circle">
-                    <div class="progress-ring">
-                        <svg width="200" height="200">
-                            <circle class="progress-ring-circle" cx="100" cy="100" r="90" stroke="#ff0033" stroke-width="10" fill="transparent"/>
-                        </svg>
-                    </div>
-                    <div class="progress-text" id="progress-text">0%</div>
-             </div>
-               
-                
-                <div class="loading-stats">
-                    <div class="stat-item">
-                        <span class="stat-label">SYSTEM CHECK</span>
-                        <span class="stat-value" id="system-check">PENDING</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">CONNECTION</span>
-                        <span class="stat-value" id="connection">ESTABLISHING</span>
-                    </div>
-                   
-                </div>
-            </div>
-            
-            <div class="loading-message">
-                <p id="loading-message">> INITIALIZING CYBER SCAN PROTOCOL...</p>
-                <div class="terminal-line">
-                    <span class="prompt">root@cyberscan:~#</span>
-                    <span class="command" id="terminal-command"></span>
-                    <span class="cursor">█</span>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Skip Button -->
-        <button id="skip-btn" class="skip-btn">
-            <i class="fas fa-forward"></i> SKIP INTRO
-        </button>
-    </div>
+    
     
     <!-- MAIN INTERFACE (Hidden Initially) -->
     <div id="main-interface" class="main-interface">
