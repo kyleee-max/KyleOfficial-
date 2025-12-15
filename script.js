@@ -1,14 +1,29 @@
 // LOAD CONFIG
+function initUI() {
+    const c = window.config || {
+        margaName: 'MARGA',
+        isOpenMember: false,
+        cnList: [],
+        bioList: []
+    };
+
+    document.getElementById('margaName').innerText = c.margaName;
+}
 async function loadConfig() {
     try {
-        const response = await fetch('config.json');
-        window.config = await response.json();
+        const local = localStorage.getItem('margaConfig');
+        if (local) {
+            window.config = JSON.parse(local);
+        } else {
+            const res = await fetch('config.json');
+            window.config = await res.json();
+        }
         updateUI();
-    } catch (error) {
-        console.error('Gagal load config');
+    } catch (e) {
+        console.error(e);
+        alert('Config gagal dimuat');
     }
 }
-
 // UPDATE UI
 function updateUI() {
     const c = window.config;
