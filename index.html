@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Seleksi Marga</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="logo-dots">
+                    <span class="logo-dot"></span>
+                    <span class="logo-dot"></span>
+                    <span class="logo-dot"></span>
+                </div>
+                <h1 id="margaName">Loading...</h1>
+            </div>
+            <div class="nav-status">
+                <span class="status-badge" id="statusBadge">
+                    <i class="fas fa-circle"></i>
+                    <span>Loading...</span>
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section id="welcomePage" class="page active">
+            <div class="hero">
+                <div class="avatar-container">
+                    <img src="" alt="Group Avatar" id="groupAvatar" onerror="hideAvatar()">
+                    <div class="avatar-fallback" id="avatarFallback">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+                
+                <h2 id="welcomeTitle">Loading...</h2>
+                <p class="subtitle">Seleksi Anggota Resmi</p>
+                
+                <button class="btn-primary" id="startBtn" onclick="startSelection()">
+                    <i class="fas fa-play"></i> Mulai Seleksi
+                </button>
+                
+                <div class="alert" id="closeAlert">
+                    <i class="fas fa-lock"></i>
+                    <div>
+                        <strong>CLOSE MEMBER</strong>
+                        <p>Hubungi Owner untuk info selanjutnya</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="requirements">
+                <h3><i class="fas fa-list-check"></i> Syarat Seleksi</h3>
+                
+                <div class="req-grid">
+                    <div class="req-card">
+                        <div class="req-icon"><i class="fas fa-user-tag"></i></div>
+                        <h4>CN TikTok</h4>
+                        <p>Nickname harus mengandung CN tertentu</p>
+                        <div class="example">
+                            <small>Contoh:Ceteka</small>
+                            <code id="cnExample">Loading...</code>
+                        </div>
+                    </div>
+                    
+                    <div class="req-card">
+                        <div class="req-icon"><i class="fas fa-file-alt"></i></div>
+                        <h4>Bio TikTok</h4>
+                        <p>Bio harus sama persis</p>
+                        <div class="example">
+                            <small>Contoh: C.T.K.F</small>
+                            <code id="bioExample">Loading...</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="usernamePage" class="page">
+            <div class="page-header">
+                <button class="back-btn" onclick="goToWelcome()">←</button>
+                <h3>Input Username TikTok</h3>
+            </div>
+            
+            <div class="input-card">
+                <label><i class="fab fa-tiktok"></i> Username TikTok</label>
+                <input type="text" id="usernameInput" placeholder="username">
+                <small>Masukkan username tanpa @</small>
+                
+                <button class="btn-primary" onclick="checkUsername()">Cek Akun</button>
+                
+                <div class="loading" id="loading">Memeriksa...</div>
+                <div class="error" id="error"></div>
+            </div>
+        </section>
+
+        <section id="accountPage" class="page">
+            <div class="page-header">
+                <button class="back-btn" onclick="goToUsername()">←</button>
+                <h3>Info Akun TikTok</h3>
+            </div>
+            
+            <div class="profile-card">
+                <img src="" alt="Profile" id="profileImg">
+                <h4 id="profileName">Loading...</h4>
+                <p id="profileUsername">@username</p>
+                <p id="profileBio">Bio...</p>
+                
+                <div class="stats">
+                    <div class="stat">
+                        <strong id="followers">0</strong>
+                        <span>Followers</span>
+                    </div>
+                    <div class="stat">
+                        <strong id="following">0</strong>
+                        <span>Following</span>
+                    </div>
+                    <div class="stat">
+                        <strong id="likes">0</strong>
+                        <span>Likes</span>
+                    </div>
+                    <div class="stat">
+                        <strong id="videos">0</strong>
+                        <span>Videos</span>
+                    </div>
+                </div>
+                
+                <div class="validation">
+                    <div class="valid-item" id="cnValid">
+                        <i class="fas fa-check-circle"></i>
+                        <span>CN: Valid</span>
+                    </div>
+                    <div class="valid-item" id="bioValid">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Bio: Valid</span>
+                    </div>
+                </div>
+                
+                <button class="btn-primary" onclick="goToIntro()">Lanjutkan</button>
+            </div>
+        </section>
+
+        <section id="introPage" class="page">
+            <div class="page-header">
+                <button class="back-btn" onclick="goToAccount()">←</button>
+                <h3>Formulir Intro</h3>
+            </div>
+            
+            <div class="form-card">
+                <div class="form-group">
+                    <label>Nama Lengkap</label>
+                    <input type="text" id="inputName">
+                </div>
+                <div class="form-group">
+                    <label>Gender</label>
+                    <select id="inputGender">
+                        <option value="">Pilih</option>
+                        <option value="Laki-laki">Laki-laki</option>
+                        <option value="Perempuan">Perempuan</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Kota Asal</label>
+                    <input type="text" id="inputCity">
+                </div>
+                <div class="form-group">
+                    <label>Usia</label>
+                    <input type="number" id="inputAge">
+                </div>
+                <div class="form-group">
+                    <label>Waifu/Husbu</label>
+                    <input type="text" id="inputWaifu">
+                </div>
+                
+                <button class="btn-primary" onclick="submitIntro()">Submit</button>
+            </div>
+        </section>
+
+        <section id="resultPage" class="page">
+            <div class="result-header">
+                <i class="fas fa-check-circle"></i>
+                <h3>Seleksi Berhasil!</h3>
+                <p>Syarat terpenuhi</p>
+            </div>
+            
+            <div class="result-card">
+                <h4><i class="fas fa-id-card"></i> Kartu Intro</h4>
+                
+                <div class="result-info">
+                    <div class="info-row">
+                        <span>Username:</span>
+                        <strong id="resultUser">@user</strong>
+                    </div>
+                    <div class="info-row">
+                        <span>Nama:</span>
+                        <strong id="resultName">-</strong>
+                    </div>
+                    <div class="info-row">
+                        <span>Gender:</span>
+                        <strong id="resultGender">-</strong>
+                    </div>
+                    <div class="info-row">
+                        <span>Kota:</span>
+                        <strong id="resultCity">-</strong>
+                    </div>
+                    <div class="info-row">
+                        <span>Usia:</span>
+                        <strong id="resultAge">-</strong>
+                    </div>
+                    <div class="info-row">
+                        <span>Waifu/Husbu:</span>
+                        <strong id="resultWaifu">-</strong>
+                    </div>
+                </div>
+                
+                <div class="result-actions">
+                    <button class="btn-primary" onclick="copyIntro()">
+                        <i class="fas fa-copy"></i> Copy Intro
+                    </button>
+                    <a href="" class="btn-secondary" id="groupLink" target="_blank">
+                        <i class="fas fa-sign-in-alt"></i> Join Group
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
