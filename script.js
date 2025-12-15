@@ -181,10 +181,21 @@ function updateResultPage() {
 }
 
 function copyIntro() {
-    const intro = `Kartu Intro:\nNama: ${window.introData.name}\nGender: ${window.introData.gender}\nKota: ${window.introData.city}\nUsia: ${window.introData.age}\nWaifu/Husbu: ${window.introData.waifu}`;
-    navigator.clipboard.writeText(intro);
-    alert('Intro disalin!');
-}
+    const intro = `
+╭───「 𝐊𝐀𝐑𝐓𝐔 𝐈𝐍𝐓𝐑𝐎 」───╮
+│
+│ ◆ 𝐍𝐚𝐦𝐚      : ${window.introData.name}
+│ ◆ 𝐆𝐞𝐧𝐝𝐞𝐫    : ${window.introData.gender}
+│ ◆ 𝐀𝐬𝐚𝐥 𝐊𝐨𝐭𝐚 : ${window.introData.city}
+│ ◆ 𝐔𝐦𝐮𝐫      : ${window.introData.age} Tahun
+│ ◆ 𝐖𝐚𝐢𝐟𝐮/𝐇𝐮𝐬𝐛𝐮 : ${window.introData.waifu}
+│
+╰──────────────╯
+`;
+
+    navigator.clipboard.writeText(intro.trim());
+    alert('Intro berhasil disalin!');
+                    }
 
 // INIT
 loadConfig();
