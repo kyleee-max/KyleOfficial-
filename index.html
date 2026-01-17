@@ -1,110 +1,589 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kael Senpai | Promt Engineer</title>
-    <meta property="og:title" content="Kael Senpai | Dev">
-<meta property="og:description" content="JS Developer & Prompt Engineer">
-<meta property="og:image" content="https://files.catbox.moe/wgzlwv.jpg">
-<meta property="og:url" content="https://kayeel-tamvan.vercel.app"> 
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kael Store | Enterprise Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --cf-blue: #0051ad;
+            --cf-bg: #000000;
+            --cf-card: #0a0a0a;
+            --cf-border: #1c1c1c;
+            --cf-text: #d9d9d9;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--cf-bg);
+            color: var(--cf-text);
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .mono { font-family: 'Fira Code', monospace; }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            color: #888;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+            border-radius: 6px;
+            margin: 2px 12px;
+        }
+
+        .sidebar-link:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+        }
+
+        .sidebar-link.active {
+            background: rgba(0, 81, 173, 0.15);
+            color: #58a6ff;
+        }
+
+        .cf-card {
+            background: var(--cf-card);
+            border: 1px solid var(--cf-border);
+            border-radius: 8px;
+            transition: border-color 0.2s;
+        }
+
+        .cf-card:hover { border-color: #333; }
+
+        .cf-input {
+            background: #000 !important;
+            border: 1px solid var(--cf-border) !important;
+            color: #fff !important;
+            border-radius: 4px !important;
+            padding: 8px 12px !important;
+            font-size: 13px !important;
+            width: 100%;
+        }
+
+        .cf-input:focus { border-color: var(--cf-blue) !important; outline: none; }
+
+        .cf-btn {
+            background: var(--cf-blue);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: opacity 0.2s;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .cf-btn:hover { opacity: 0.9; }
+        .cf-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .custom-scroll::-webkit-scrollbar { width: 5px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .voucher-gradient {
+            background: linear-gradient(90deg, rgba(0,81,173,0.15) 0%, rgba(0,0,0,0) 100%);
+            border: 1px dashed var(--cf-blue);
+        }
+
+        .drag-area {
+            border: 2px dashed #333;
+            transition: all 0.2s;
+        }
+        .drag-area.active {
+            border-color: var(--cf-blue);
+            background: rgba(0, 81, 173, 0.05);
+        }
+
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .owner-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 2px solid var(--cf-blue);
+            object-fit: cover;
+            transition: opacity 0.5s ease-in-out;
+        }
+    </style>
 </head>
-<body>
-    <div class="container">
-        <header class="profile-header">
-            <div class="avatar-wrapper">
-                <img src="https://files.catbox.moe/wgzlwv.jpg" alt="Kael Senpai">
+<body class="flex h-screen">
+
+    <div id="alert-container" class="fixed top-5 right-5 z-[110] flex flex-col gap-2"></div>
+
+    <aside class="w-64 border-r border-[#1c1c1c] flex flex-col bg-[#050505]">
+        <div class="p-6 flex items-center gap-3 border-b border-[#1c1c1c]">
+            <div class="w-8 h-8 bg-blue-700 rounded flex items-center justify-center">
+                <i data-lucide="cloud" class="text-white w-5 h-5"></i>
             </div>
-            <h1>Kael Senpai</h1>
-            <p class="tagline">Prompt Engineer & JS Developer</p>
+            <span class="font-bold tracking-tight text-white text-lg italic">KAEL<span class="text-blue-500">SYS</span></span>
+        </div>
+
+        <nav class="flex-1 py-4 overflow-y-auto custom-scroll">
+            <div class="px-7 py-2 text-[10px] text-gray-500 font-bold uppercase tracking-wider">Common</div>
+            <a href="javascript:void(0)" id="nav-dashboard" onclick="switchTab('dashboard')" class="sidebar-link active"><i data-lucide="home" class="w-4 h-4"></i> Overview</a>
+            <a href="javascript:void(0)" id="nav-tools" onclick="switchTab('tools')" class="sidebar-link"><i data-lucide="wrench" class="w-4 h-4"></i> AI Tools</a>
+            <a href="javascript:void(0)" id="nav-blog" onclick="switchTab('blog')" class="sidebar-link"><i data-lucide="newspaper" class="w-4 h-4"></i> Archive</a>
+
+            <div class="px-7 py-4 text-[10px] text-gray-500 font-bold uppercase tracking-wider">Compute</div>
+            <a href="javascript:void(0)" id="nav-pterodactyl" onclick="switchTab('pterodactyl')" class="sidebar-link"><i data-lucide="server" class="w-4 h-4"></i> Pterodactyl</a>
+            <a href="javascript:void(0)" id="nav-wa-bot" onclick="switchTab('wa-bot')" class="sidebar-link"><i data-lucide="bot" class="w-4 h-4"></i> Bot Engine</a>
+
+            <div class="mt-auto px-7 py-4">
+                <a href="javascript:void(0)" id="nav-admin" onclick="switchTab('admin')" class="sidebar-link !mx-0"><i data-lucide="lock" class="w-4 h-4"></i> Administration</a>
+            </div>
+        </nav>
+
+        <div class="p-4 border-t border-[#1c1c1c] bg-[#080808]">
+            <div class="flex items-center gap-3 mb-3">
+                <img id="owner-pfp" src="https://files.catbox.moe/aofjvu.jpg" class="owner-avatar" alt="Kael">
+                <div>
+                    <div class="text-xs font-bold text-white">KAEL</div>
+                    <div class="text-[9px] text-blue-500 font-mono">PROMPT ENGINEER</div>
+                </div>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <a href="https://wa.me/6283854859219" target="_blank" class="p-1.5 bg-green-500/10 rounded hover:bg-green-500/20 transition-colors">
+                    <i data-lucide="phone" class="w-3.5 h-3.5 text-green-500"></i>
+                </a>
+                <a href="https://t.me/kyletzy13" target="_blank" class="p-1.5 bg-sky-500/10 rounded hover:bg-sky-500/20 transition-colors">
+                    <i data-lucide="send" class="w-3.5 h-3.5 text-sky-500"></i>
+                </a>
+                <a href="https://www.tiktok.com/@kael.senpai.pensi" target="_blank" class="p-1.5 bg-pink-500/10 rounded hover:bg-pink-500/20 transition-colors">
+                    <i data-lucide="music" class="w-3.5 h-3.5 text-pink-500"></i>
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col min-w-0 bg-black">
+        <header class="h-14 border-b border-[#1c1c1c] flex items-center justify-between px-8 bg-[#050505]">
+            <div id="page-title" class="text-xs font-semibold text-gray-400 uppercase tracking-widest">System / Dashboard</div>
+            <div class="flex items-center gap-4">
+                <div id="admin-tag" class="hidden px-2 py-1 border border-blue-500/30 bg-blue-500/10 rounded text-[10px] text-blue-400 font-bold">ADMIN_SESSION</div>
+                <div class="flex items-center gap-2">
+                    <span class="status-dot bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]"></span>
+                    <span class="text-[11px] font-medium text-gray-400">Operational</span>
+                </div>
+            </div>
         </header>
 
-        <section class="stats-card">
-            <div class="skill">
-                <div class="skill-info">
-                    <span>JavaScript Specialist</span>
-                    <span>98%</span>
-                </div>
-                <div class="progress-bg"><div class="progress-fill" style="width: 98%;"></div></div>
-            </div>
-            <div class="skill">
-                <div class="skill-info">
-                    <span>Prompt Engineering</span>
-                    <span>95%</span>
-                </div>
-                <div class="progress-bg"><div class="progress-fill" style="width: 95%;"></div></div>
-            </div>
-             <div class="skill">
-                <div class="skill-info">
-                    <span>Mencintai Dia</span>
-                    <span>100%%</span>
-                </div>
-                <div class="progress-bg"><div class="progress-fill" style="width: 100%;"></div></div>
-            </div>
-             <div class="skill">
-                <div class="skill-info">
-                    <span>Melupakan dia</span>
-                    <span>20%</span>
-                </div>
-                <div class="progress-bg"><div class="progress-fill" style="width: 20%;"></div></div>
-            </div>
-        </section>
-        <section class="stats-card">
-    <div class="description-content">
-        <h3 style="font-size: 0.9rem; color: #0088ff; margin-bottom: 10px; text-align: left;">
-            <i class="fas fa-info-circle"></i> About
-        </h3>
-        <p class="desc-text">
-            Halo, gua Kael Senpai. Seorang ahli dalam membuat dan meracik prompt AI dan membangun logika JavaScript yang solid. Gw Seorang pemula yang mempelajari codding secara otodidak dan di bantu oleh Ai Khususnya Chat Gpt Dan Gemini Ai
-        </p>
-    </div>
-</section>
-<h3 class="section-title">My istri</h3>
-<div class="scroll-container">
-    
-    <div class="stats-card item-card-v2">
-        <img src="https://files.catbox.moe/n8g49t.jpg" alt="Waifu">
-        <div class="item-detail">
-            <span class="category">Istri Ke -2</span>
-            <span class="name">Sparkle</span>
-            <a href="https://files.catbox.moe/n8g49t.jpg" class="view-btn">View Profile</a>
-        </div>
-    </div>
+        <div id="content" class="flex-1 overflow-y-auto p-8 custom-scroll"></div>
 
-    <div class="stats-card item-card-v2">
-        <img src="https://files.catbox.moe/36zzp0.jpg" alt="Anime">
-        <div class="item-detail">
-            <span class="category">Istri ke -1</span>
-            <span class="name">Kurumi</span>
-            <a href="https://files.catbox.moe/36zzp0.jpg" class="view-btn">View Image</a>
-        </div>
-    </div>
-    </div>
-        <div class="social-links">
-            <a href="https://www.tiktok.com/@kael.senpai.pensi" class="social-icon"><i class="fab fa-tiktok"></i></a>
-            <a href="https://t.me/kyletzy13" class="social-icon"><i class="fab fa-telegram-plane"></i></a>
-            <a href="serverganti493@gmail.com" class="social-icon"><i class="fas fa-envelope"></i></a>
-        </div>
-
-        <footer class="actions">
-            <button id="audioToggle" class="audio-btn">
-                <i class="fas fa-play"></i> Background Sound
-            </button>
-            <a href="https://wa.me/6283854859219" class="wa-btn">
-                <i class="fab fa-whatsapp"></i> Chat Me on WhatsApp
-            </a>
+        <footer class="h-12 border-t border-[#1c1c1c] bg-[#050505] px-8 flex items-center justify-between text-[10px] text-gray-500">
+            <div class="flex gap-4">
+                <span>&copy; 2026 Kael Store Enterprise.</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <i data-lucide="shield-check" class="w-3 h-3 text-green-500"></i>
+                <span class="mono">VERIFIED CLOUDFLARE NODE</span>
+            </div>
         </footer>
-    </div>
-<footer class="main-footer">
-    <div class="footer-line"></div>
-    <p>&copy; 2026 <span class="blue-text">Kael Senpai</span>. All Rights Reserved.</p>
-</footer>
-    <audio id="bgMusic" loop>
-        <source src="favian.mp3" type="audio/mpeg">
-    </audio>
+    </main>
 
-    <script src="script.js"></script>
+    <div id="modal-admin-auth" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden z-[100] flex items-center justify-center">
+        <div class="w-80 cf-card p-8 bg-[#0a0a0a] shadow-2xl">
+            <h3 class="text-sm font-bold text-center mb-6 text-white">Enter Admin Key</h3>
+            <input type="password" id="admin-key" placeholder="••••••••" class="cf-input text-center mb-4">
+            <button onclick="verifyAdmin()" class="w-full cf-btn">Authorize</button>
+            <button onclick="closeAdmin()" class="w-full mt-2 text-xs text-gray-500 hover:text-white transition-colors">Abort</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+        import { getFirestore, collection, onSnapshot, addDoc, updateDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'kael-v3-prod';
+
+        let products = [], vouchers = [], quotes = [], isAdmin = false, activeTab = 'dashboard';
+
+        const pfpUrls = [
+            "https://files.catbox.moe/aofjvu.jpg",
+            "https://files.catbox.moe/3malb2.jpg",
+            "https://files.catbox.moe/0ff9xy.jpg",
+            "https://files.catbox.moe/w67f2b.jpg"
+        ];
+        let currentPfpIndex = 0;
+
+        const rotatePfp = () => {
+            const pfpImg = document.getElementById('owner-pfp');
+            if (pfpImg) {
+                currentPfpIndex = (currentPfpIndex + 1) % pfpUrls.length;
+                pfpImg.style.opacity = '0.3';
+                setTimeout(() => {
+                    pfpImg.src = pfpUrls[currentPfpIndex];
+                    pfpImg.style.opacity = '1';
+                }, 300);
+            }
+        };
+        setInterval(rotatePfp, 3000);
+
+        const onEnter = (id, callback) => {
+            const el = document.getElementById(id);
+            if(el) el.onkeydown = (e) => { if(e.key === 'Enter') callback(); };
+        };
+
+        window.switchTab = (tab) => {
+            if(tab === 'admin' && !isAdmin) {
+                document.getElementById('modal-admin-auth').classList.remove('hidden');
+                setTimeout(() => {
+                   const input = document.getElementById('admin-key');
+                   input.focus();
+                   onEnter('admin-key', verifyAdmin);
+                }, 100);
+                return;
+            }
+            activeTab = tab;
+            document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+            document.getElementById(`nav-${tab}`)?.classList.add('active');
+            document.getElementById('page-title').innerText = `System / ${tab.charAt(0).toUpperCase() + tab.slice(1)}`;
+            renderContent();
+        };
+
+        const renderContent = () => {
+            const el = document.getElementById('content');
+            if(!el) return;
+            el.innerHTML = "";
+
+            if(activeTab === 'dashboard') {
+                el.innerHTML = `
+                <div class="space-y-8 fade-in">
+                    <div class="cf-card p-8 bg-gradient-to-r from-blue-900/10 to-transparent border-l-4 border-l-blue-600">
+                        <i data-lucide="quote" class="w-6 h-6 text-blue-500 mb-4 opacity-50"></i>
+                        <p id="display-quote" class="text-lg font-medium text-white italic mb-2">"${quotes[0]?.text || "Infrastructure is operational."}"</p>
+                        <p id="display-author" class="text-[10px] text-gray-500 mono uppercase tracking-widest">— ${quotes[0]?.author || "System"}</p>
+                    </div>
+                    <div class="cf-card p-10 flex flex-col md:flex-row justify-between items-center gap-6">
+                        <div class="max-w-xl text-center md:text-left">
+                            <h2 class="text-3xl font-bold text-white mb-2 tracking-tight">Enterprise Infrastructure</h2>
+                            <p class="text-gray-400 text-sm leading-relaxed mb-6">Kelola bot, node server, dan gunakan AI Tools terintegrasi dalam satu panel eksklusif.</p>
+                            <button onclick="switchTab('tools')" class="cf-btn mx-auto md:mx-0">Buka Panel Tools</button>
+                        </div>
+                        <div class="w-32 h-32 flex items-center justify-center border border-blue-500/20 rounded-full bg-blue-500/5">
+                            <i data-lucide="zap" class="w-16 h-16 text-blue-500"></i>
+                        </div>
+                    </div>
+                </div>`;
+            } else if(activeTab === 'tools') {
+                el.innerHTML = `
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 fade-in">
+                    <!-- Brat Maker -->
+                    <div class="cf-card p-6">
+                        <h4 class="text-sm font-bold mb-4 flex items-center gap-2 text-white"><i data-lucide="type" class="w-4 h-4 text-blue-500"></i> Brat Maker</h4>
+                        <input id="brat-text" placeholder="Teks..." class="cf-input mb-4">
+                        <button onclick="runTool('brat')" id="btn-brat" class="cf-btn w-full">Generate Brat</button>
+                        <div id="brat-res" class="mt-4 flex justify-center"></div>
+                    </div>
+                    <!-- IQC Quoted -->
+                    <div class="cf-card p-6">
+                        <h4 class="text-sm font-bold mb-4 flex items-center gap-2 text-white"><i data-lucide="message-square" class="w-4 h-4 text-purple-500"></i> IQC Quoted Style</h4>
+                        <input id="iqc-text" placeholder="Teks pesan..." class="cf-input mb-3">
+                        <input id="iqc-time" placeholder="Waktu (e.g 12:00)" class="cf-input mb-4">
+                        <button onclick="runTool('iqc')" id="btn-iqc" class="cf-btn w-full !bg-purple-700">Generate Quoted</button>
+                        <div id="iqc-res" class="mt-4 flex justify-center"></div>
+                    </div>
+                    <!-- Remove BG -->
+                    <div class="cf-card p-6">
+                        <h4 class="text-sm font-bold mb-4 flex items-center gap-2 text-white"><i data-lucide="eraser" class="w-4 h-4 text-pink-500"></i> Remove Background</h4>
+                        <div class="space-y-3">
+                            <input id="rb-url" placeholder="Paste Image URL..." class="cf-input">
+                            <div class="flex items-center gap-3">
+                                <div class="flex-1 h-[1px] bg-gray-800"></div>
+                                <span class="text-[10px] text-gray-600">OR UPLOAD</span>
+                                <div class="flex-1 h-[1px] bg-gray-800"></div>
+                            </div>
+                            <div id="drop-rb" class="drag-area w-full h-24 rounded flex flex-col items-center justify-center cursor-pointer border-pink-500/20 hover:border-pink-500/50">
+                                <i data-lucide="upload" class="w-6 h-6 text-gray-600"></i>
+                                <p class="text-[10px] text-gray-500 mt-1">Click to Upload</p>
+                                <input type="file" id="rb-file" class="hidden" accept="image/*">
+                            </div>
+                            <button onclick="processImageTool('removebg')" id="btn-rb" class="cf-btn w-full !bg-pink-700">Remove BG Now</button>
+                        </div>
+                        <div id="rb-res" class="mt-4 flex justify-center"></div>
+                    </div>
+                    <!-- HD Upscaler (NEW) -->
+                    <div class="cf-card p-6">
+                        <h4 class="text-sm font-bold mb-4 flex items-center gap-2 text-white"><i data-lucide="sparkles" class="w-4 h-4 text-yellow-500"></i> AI Image HD Upscaler</h4>
+                        <div class="space-y-3">
+                            <input id="hd-url" placeholder="Paste Image URL..." class="cf-input">
+                            <div class="flex items-center gap-3">
+                                <div class="flex-1 h-[1px] bg-gray-800"></div>
+                                <span class="text-[10px] text-gray-600">OR UPLOAD</span>
+                                <div class="flex-1 h-[1px] bg-gray-800"></div>
+                            </div>
+                            <div id="drop-hd" class="drag-area w-full h-24 rounded flex flex-col items-center justify-center cursor-pointer border-yellow-500/20 hover:border-yellow-500/50">
+                                <i data-lucide="maximize" class="w-6 h-6 text-gray-600"></i>
+                                <p class="text-[10px] text-gray-500 mt-1">Click to Upload</p>
+                                <input type="file" id="hd-file" class="hidden" accept="image/*">
+                            </div>
+                            <button onclick="processImageTool('hd')" id="btn-hd" class="cf-btn w-full !bg-yellow-700">Upscale to HD</button>
+                        </div>
+                        <div id="hd-res" class="mt-4 flex justify-center"></div>
+                    </div>
+                </div>`;
+                
+                initImageTool('rb');
+                initImageTool('hd');
+                onEnter('brat-text', () => runTool('brat'));
+                onEnter('iqc-text', () => runTool('iqc'));
+            } else if(activeTab === 'admin') {
+                el.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 fade-in">
+                    <div class="cf-card p-8">
+                        <h3 class="text-sm font-bold mb-6 flex items-center gap-2 text-blue-400"><i data-lucide="ticket"></i> Promo Voucher Editor</h3>
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-2 gap-4">
+                                <input id="v-code" placeholder="Kode Promo" class="cf-input">
+                                <input id="v-diskon" type="number" placeholder="Diskon %" class="cf-input">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <input id="v-min" type="number" placeholder="Min. Beli (Rp)" class="cf-input">
+                                <select id="v-kategori" class="cf-input">
+                                    <option value="pterodactyl">Pterodactyl</option>
+                                    <option value="wa-bot">Bot Engine</option>
+                                </select>
+                            </div>
+                            <textarea id="v-desc" placeholder="Deskripsi Singkat" class="cf-input h-20"></textarea>
+                            <button onclick="saveVoucher()" class="cf-btn w-full">Save Voucher Config</button>
+                        </div>
+                    </div>
+                    <div class="cf-card p-8">
+                        <h3 class="text-sm font-bold mb-6 flex items-center gap-2 text-blue-400"><i data-lucide="database"></i> Product Manager</h3>
+                        <div class="space-y-4">
+                               <input id="p-name" placeholder="Nama Produk" class="cf-input">
+                            <input id="p-price" type="number" placeholder="Harga" class="cf-input">
+                            <select id="p-type" class="cf-input">
+                                <option value="pterodactyl">Pterodactyl</option>
+                                <option value="wa-bot">Bot Engine</option>
+                            </select>
+                            <button onclick="saveProduct()" class="cf-btn w-full">Tambah Produk</button>
+                        </div>
+                    </div>
+                    <div class="cf-card p-8 col-span-full">
+                        <h3 class="text-sm font-bold mb-6 flex items-center gap-2 text-blue-400"><i data-lucide="quote"></i> Daily Quote Editor</h3>
+                        <div class="space-y-4">
+                            <textarea id="q-text" placeholder="Quotes hari ini..." class="cf-input h-24">${quotes[0]?.text || ''}</textarea>
+                            <div class="flex gap-4">
+                                <input id="q-author" placeholder="Author" class="cf-input" value="${quotes[0]?.author || ''}">
+                                <button onclick="saveQuote()" class="cf-btn whitespace-nowrap !bg-white !text-black">Update Quote</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            } else {
+                const filteredProducts = products.filter(p => p.type === activeTab);
+                const relevantVoucher = vouchers.find(v => v.kategori === activeTab);
+                const hasEligibleProduct = filteredProducts.some(p => parseInt(p.price) >= (parseInt(relevantVoucher?.min_buy) || 0));
+
+                el.innerHTML = `
+                <div class="space-y-6 fade-in">
+                    ${relevantVoucher && hasEligibleProduct ? `
+                    <div class="cf-card p-4 voucher-gradient flex justify-between items-center border-blue-500/40">
+                        <div class="flex gap-4 items-center">
+                            <div class="text-blue-500 font-bold text-xl mono tracking-tighter">${relevantVoucher.diskon}% OFF</div>
+                            <div class="h-8 w-[1px] bg-white/10"></div>
+                            <div>
+                                <div class="text-[11px] text-gray-300 font-medium italic mb-1">${relevantVoucher.description}</div>
+                                <div class="text-[10px] text-gray-400">Min. Pembelian: <span class="text-white">Rp ${parseInt(relevantVoucher.min_buy).toLocaleString()}</span> | Code: <span class="text-blue-400 font-bold">${relevantVoucher.code}</span></div>
+                            </div>
+                        </div>
+                        <button onclick="copyToClipboard('${relevantVoucher.code}')" class="text-[9px] font-bold text-white bg-blue-800 px-3 py-1 rounded">COPY</button>
+                    </div>
+                    ` : ''}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        ${filteredProducts.map(p => {
+                            const isVoucherApplicable = relevantVoucher && parseInt(p.price) >= parseInt(relevantVoucher.min_buy);
+                            return `
+                            <div class="cf-card p-6 flex flex-col justify-between ${isVoucherApplicable ? 'border-blue-500/20 shadow-[0_0_15px_rgba(0,81,173,0.1)]' : ''}">
+                                <div>
+                                    <div class="flex justify-between items-start mb-1">
+                                        <div class="text-[10px] text-blue-500 font-bold uppercase tracking-widest">${p.type}</div>
+                                        ${isVoucherApplicable ? '<span class="text-[8px] bg-blue-600 text-white px-1 rounded font-bold">PROMO OK</span>' : ''}
+                                    </div>
+                                    <h4 class="text-lg font-bold text-white mb-2">${p.name}</h4>
+                                    <p class="text-sm font-medium text-gray-500 mb-6">Rp ${parseInt(p.price).toLocaleString()}</p>
+                                </div>
+                                <button class="cf-btn w-full">Order Now</button>
+                            </div>`;
+                        }).join('') || '<p class="col-span-full py-20 text-center text-gray-600">No products found in this node.</p>'}
+                    </div>
+                </div>`;
+            }
+            lucide.createIcons();
+        };
+
+        const initImageTool = (prefix) => {
+            const drop = document.getElementById(`drop-${prefix}`);
+            const input = document.getElementById(`${prefix}-file`);
+            if(drop && input) {
+                drop.onclick = () => input.click();
+                input.onchange = (e) => {
+                    const file = e.target.files[0];
+                    if(file) processImageTool(prefix === 'rb' ? 'removebg' : 'hd', file);
+                };
+            }
+        };
+
+        window.processImageTool = async (type, file = null) => {
+            const prefix = type === 'removebg' ? 'rb' : 'hd';
+            const urlInput = document.getElementById(`${prefix}-url`);
+            const btn = document.getElementById(`btn-${prefix}`);
+            const resBox = document.getElementById(`${prefix}-res`);
+            
+            let imageUrl = urlInput.value;
+
+            if(!file && !imageUrl) return showAlert("Masukan URL atau Upload Foto!", "error");
+
+            btn.disabled = true;
+            btn.innerHTML = `<span class="animate-spin h-4 w-4 border-2 border-white/20 border-t-white rounded-full"></span>`;
+            resBox.innerHTML = `<p class="text-[10px] text-gray-500 animate-pulse">Processing AI Engine...</p>`;
+
+            try {
+                if(file) {
+                    const formData = new FormData();
+                    formData.append('reqtype', 'fileupload');
+                    formData.append('fileToUpload', file);
+                    const uploadRes = await fetch('https://catbox.moe/user/api.php', { method: 'POST', body: formData });
+                    imageUrl = await uploadRes.text();
+                }
+
+                const finalUrl = `https://api.deline.web.id/tools/${type}?url=${encodeURIComponent(imageUrl)}`;
+                
+                resBox.innerHTML = `
+                    <div class="cf-card p-2 border-blue-500/20 mt-2">
+                        <img src="${finalUrl}" class="max-w-full rounded shadow-xl bg-[url('https://www.transparenttextures.com/patterns/checkerboard.png')]">
+                        <div class="flex gap-2 mt-2">
+                            <a href="${finalUrl}" target="_blank" class="cf-btn flex-1 !text-[10px]">Download</a>
+                            <button onclick="copyToClipboard('${finalUrl}')" class="cf-btn !bg-gray-800 !text-[10px]">Link</button>
+                        </div>
+                    </div>
+                `;
+                showAlert("AI Task Completed!");
+            } catch (e) {
+                showAlert("Error processing image", "error");
+                resBox.innerHTML = "";
+            } finally {
+                btn.disabled = false;
+                btn.innerText = type === 'removebg' ? "Remove BG Now" : "Upscale to HD";
+            }
+        };
+
+        window.runTool = async (type) => {
+            const btn = document.getElementById(`btn-${type}`);
+            const resBox = document.getElementById(`${type}-res`);
+            const input = document.getElementById(`${type}-text`);
+            if(!input.value) return showAlert("Masukan teks!", "error");
+            
+            btn.disabled = true;
+            btn.innerHTML = `<span class="animate-spin h-4 w-4 border-2 border-white/20 border-t-white rounded-full"></span>`;
+            
+            try {
+                let text = input.value;
+                let url = type === 'brat' 
+                    ? `https://api.deline.web.id/maker/brat?text=${encodeURIComponent(text)}`
+                    : `https://api.deline.web.id/maker/iqc?text=${encodeURIComponent(text)}&chatTime=12:00&statusBarTime=12:00`;
+                resBox.innerHTML = `<img src="${url}" class="max-w-full rounded border border-[#333] shadow-xl mt-4">`;
+                showAlert("Success generated!");
+            } catch (e) { showAlert("Error generating image", "error"); }
+            finally { btn.disabled = false; btn.innerText = `Generate ${type.toUpperCase()}`; }
+        };
+
+        window.verifyAdmin = () => {
+            const val = document.getElementById('admin-key').value;
+            if(val === "KAEL STORE") {
+                isAdmin = true;
+                document.getElementById('admin-tag').classList.remove('hidden');
+                document.getElementById('modal-admin-auth').classList.add('hidden');
+                showAlert("Access Granted");
+                switchTab('admin');
+            } else { showAlert("Unauthorized key", "error"); }
+        };
+
+        window.closeAdmin = () => {
+            document.getElementById('modal-admin-auth').classList.add('hidden');
+            switchTab('dashboard');
+        };
+
+        window.saveProduct = async () => {
+            if (!auth.currentUser) return;
+            const n = document.getElementById('p-name').value, p = document.getElementById('p-price').value, t = document.getElementById('p-type').value;
+            if(!n || !p) return showAlert("Isi semua data!", "error");
+            await addDoc(collection(db,'artifacts',appId,'public','data','products'), {name:n, price:p, type:t});
+            showAlert("Product added");
+        };
+
+        window.saveVoucher = async () => {
+            if (!auth.currentUser) return;
+            const c = document.getElementById('v-code').value, d = document.getElementById('v-desc').value, disc = document.getElementById('v-diskon').value, min = document.getElementById('v-min').value, kat = document.getElementById('v-kategori').value;
+            await setDoc(doc(db,'artifacts',appId,'public','data','promo', kat), {code: c, description: d, diskon: disc, min_buy: min, kategori: kat});
+            showAlert("Voucher updated");
+        };
+
+        window.saveQuote = async () => {
+            if (!auth.currentUser) return;
+            const t = document.getElementById('q-text').value, a = document.getElementById('q-author').value;
+            await setDoc(doc(db,'artifacts',appId,'public','data','daily_quote', 'current'), {text: t, author: a || 'System'});
+            showAlert("Quote synced");
+        };
+
+        window.copyToClipboard = (text) => {
+            const temp = document.createElement('textarea');
+            temp.value = text;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            showAlert("Copied to clipboard!");
+        };
+
+        window.showAlert = (m, t='success') => {
+            const a = document.createElement('div');
+            a.className = `cf-card px-4 py-3 border-l-2 ${t==='success'?'border-l-blue-600':'border-l-red-600'} text-xs font-semibold bg-[#0a0a0a] fade-in shadow-2xl min-w-[200px] flex items-center justify-between`;
+            a.innerHTML = `<span>${m}</span> <i data-lucide="${t==='success'?'check-circle':'alert-circle'}" class="w-4 h-4 ${t==='success'?'text-blue-500':'text-red-500'}"></i>`;
+            document.getElementById('alert-container').appendChild(a);
+            lucide.createIcons();
+            setTimeout(() => { a.style.opacity = '0'; setTimeout(() => a.remove(), 300); }, 3000);
+        };
+
+        const init = async () => {
+            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                await signInWithCustomToken(auth, __initial_auth_token);
+            } else { await signInAnonymously(auth); }
+
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    onSnapshot(collection(db,'artifacts',appId,'public','data','products'), (s) => { products = s.docs.map(d => d.data()); renderContent(); });
+                    onSnapshot(collection(db,'artifacts',appId,'public','data','promo'), (s) => { vouchers = s.docs.map(d => d.data()); renderContent(); });
+                    onSnapshot(doc(db,'artifacts',appId,'public','data','daily_quote', 'current'), (s) => { quotes = s.exists() ? [s.data()] : []; renderContent(); });
+                }
+            });
+        };
+
+        window.onload = () => { init(); switchTab('dashboard'); };
+    </script>
 </body>
 </html>
